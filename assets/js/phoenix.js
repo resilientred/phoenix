@@ -228,6 +228,7 @@ class Push {
    */
   resend(timeout){
     this.timeout = timeout
+    this.cancelTimeout()
     this.cancelRefEvent()
     this.ref          = null
     this.refEvent     = null

@@ -219,16 +219,15 @@ var CHANNEL_EVENTS = {
 var TRANSPORTS = {
   longpoll: "longpoll",
   websocket: "websocket"
+
+  /**
+   * Initializes the Push
+   * @param {Channel} channel - The Channel
+   * @param {string} event - The event, for example `"phx_join"`
+   * @param {Object} payload - The payload, for example `{user_id: 123}`
+   * @param {number} timeout - The push timeout in milliseconds
+   */
 };
-
-/**
- * Initializes the Push
- * @param {Channel} channel - The Channel
- * @param {string} event - The event, for example `"phx_join"`
- * @param {Object} payload - The payload, for example `{user_id: 123}`
- * @param {number} timeout - The push timeout in milliseconds
- */
-
 var Push = function () {
   function Push(channel, event, payload, timeout) {
     _classCallCheck(this, Push);
@@ -253,6 +252,7 @@ var Push = function () {
     key: "resend",
     value: function resend(timeout) {
       this.timeout = timeout;
+      this.cancelTimeout();
       this.cancelRefEvent();
       this.ref = null;
       this.refEvent = null;
@@ -366,6 +366,9 @@ var Push = function () {
 
 /**
  *
+ * @param {string} topic
+ * @param {Object} params
+ * @param {Socket} socket
  */
 
 
@@ -634,6 +637,8 @@ var Channel = exports.Channel = function () {
 /** Initializes the Socket
  *
  *
+ * For IE8 support use an ES5-shim (https://github.com/es-shims/es5-shim)
+ *
  * @param {string} endPoint - The string WebSocket endpoint, ie, `"ws://example.com/socket"`,
  *                                               `"wss://example.com"`
  *                                               `"/socket"` (inherited host & protocol)
@@ -682,7 +687,6 @@ var Channel = exports.Channel = function () {
  * @param {Object}  opts.params - The optional params to pass when connecting
  *
  *
- * For IE8 support use an ES5-shim (https://github.com/es-shims/es5-shim)
 */
 
 
@@ -799,9 +803,9 @@ var Socket = exports.Socket = function () {
 
     /**
      * Logs the message. Override `this.logger` for specialized logging. noops by default
-     * @param {*} kind
-     * @param {*} msg
-     * @param {*} data
+     * @param {string} kind
+     * @param {string} msg
+     * @param {Object} data
      */
 
   }, {
@@ -940,7 +944,9 @@ var Socket = exports.Socket = function () {
       }
     }
 
-    // Return the next message ref, accounting for overflows
+    /**
+     * Return the next message ref, accounting for overflows
+     */
 
   }, {
     key: "makeRef",
