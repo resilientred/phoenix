@@ -412,8 +412,8 @@ export class Channel {
     this.joinPush.resend(timeout)
   }
 
-  rejoin(timeout = this.timeout){ if(this.isLeaving()){ return }
-    this.sendJoin(timeout)
+  rejoin(timeout = this.timeout){ if(this.isLeaving() || this.isJoining()){ return }
+      this.sendJoin(timeout)
   }
 
   trigger(event, payload, ref){

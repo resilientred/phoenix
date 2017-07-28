@@ -525,7 +525,7 @@ var Channel = exports.Channel = function () {
     key: "rejoin",
     value: function rejoin() {
       var timeout = arguments.length <= 0 || arguments[0] === undefined ? this.timeout : arguments[0];
-      if (this.isLeaving()) {
+      if (this.isLeaving() || this.isJoining()) {
         return;
       }
       this.sendJoin(timeout);
